@@ -10,27 +10,42 @@
 #define bufsize 1024
 
 int main(){
+
+  /*	Steps involved in establishing a socket on the server side are:
+	1. Create a socket with the socket() system call
+	2. Bind the socket to an address using the bind() system call. For a server socket on the 		   Internet, an address consists of a port number on the host machine.
+	3. Listen for connections with the listen() system call
+	4. Accept a connection with the accept() system call. This call typically blocks until a client 	   connects with the server.
+	5. Send and receive data
+  */
   int serverSocket, newSocket;
   char buffer[bufsize];
   char fname[255];
   int fd,n;
-  struct sockaddr_in serverAddr;
-  struct sockaddr_storage serverStorage;
-  socklen_t addr_size;
+  struct sockaddr_in serverAddr,cleint_addr;//from netinet.h header
+  //struct sockaddr_storage serverStorage;
+  int addr_size;
 
   /*---- Create the socket. The three arguments are: ----*/
-  /* 1) Internet domain 2) Stream socket 3) Default protocol (TCP in this case) */
+  /*  Adress domain
+	*Internet domain(process to process b/w two hosts
+	*Unix domain two process which share common file system communicate
+      Stream socket
+	*SOCK_STREAM continuous stream of charecters - TCP protocol
+	*DATAGRAM socket have to read entire message at once - UDP protocol
+      Default protocol (TCP in this case) */
   serverSocket = socket(PF_INET, SOCK_STREAM, 0);
   
   /*---- Configure settings of the server address struct ----*/
   /* Address family = Internet */
   serverAddr.sin_family = AF_INET;
-  /* Set port number, using htons function to use proper byte order */
+  /* Set port number, using htons function to use proper byte order
+	FTP -21
+	PORT number above 2000 are available. 
+ */
   serverAddr.sin_port = htons(7891);
   /* Set IP address to localhost */
-  serverAddr.sin_addr.s_addr = inet_addr("127.0.0.1");
-  /* Set all bits of the padding field to 0 */
-  memset(serverAddr.sin_zero, '\0', sizeof serverAddr.sin_zero);  
+  serverAddr.sin_addr.s_addr = inet_addr("127.0.0.1"); 
 
   /*---- Bind the address struct to the socket ----*/
   bind(serverSocket, (struct sockaddr *) &serverAddr, sizeof(serverAddr));
@@ -42,8 +57,8 @@ int main(){
     printf("Error\n");
 
   /*---- Accept call creates a new socket for the incoming connection ----*/
-  addr_size = sizeof serverStorage;
-  newSocket = accept(serverSocket, (struct sockaddr *) &serverStorage, &addr_size);
+  addr_size = sizeof cleint_addr;
+  newSocket = accept(serverSocket, (struct sockaddr *) &cleint_addr, &addr_size);
 
   /*---- receive file name from the incoming connection ----*/
   recv(newSocket,fname,255,0);
