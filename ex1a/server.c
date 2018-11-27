@@ -70,6 +70,11 @@ flags:The flags parameter is set by specifying one or more of the following flag
   */
   recv(newSocket,fname,255,0);
 
+/*
+File descriptors are an index into a file descriptor table stored by the kernel. The kernel creates 
+a file descriptor in response to an open call and associates the file descriptor with some abstraction of an
+underlying file-like object, be that an actual hardware device, or a file system
+*/
   fd=open(fname,O_RDONLY);
   if(fd==-1){
     strcpy(buffer,"No file found!");
