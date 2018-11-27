@@ -1,3 +1,5 @@
+//implement real time analytic, instant messaging, binary streaming, and document collaboration. 
+
 #include <stdio.h>
 #include <sys/socket.h>
 #include <netinet/in.h>
