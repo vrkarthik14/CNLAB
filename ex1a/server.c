@@ -62,7 +62,12 @@ int main(){
   addr_size = sizeof cleint_addr;
   newSocket = accept(serverSocket, (struct sockaddr *) &cleint_addr, &addr_size);
 
-  /*---- receive file name from the incoming connection ----*/
+  /*---- receive file name from the incoming connection ----
+  socket:The socket descriptor.
+buf:The pointer to the buffer that receives the data.
+len:The length in bytes of the buffer pointed to by the buf parameter. If the MSG_CONNTERM flag is set, the length of the buffer must be zero.
+flags:The flags parameter is set by specifying one or more of the following flags. If more than one flag is specified, the logical OR operator ( | ) must be used to separate them. The MSG_CONNTERM flag is mutually exclusive with other flags.
+  */
   recv(newSocket,fname,255,0);
 
   fd=open(fname,O_RDONLY);
